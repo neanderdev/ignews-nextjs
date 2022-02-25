@@ -2,10 +2,22 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import { getPrismicClient } from "../../services/prismic";
 import * as prismic from "@prismicio/client";
+import { RichText } from "prismic-dom";
 
 import styled from "./styles.module.scss";
 
-export default function Posts() {
+type Post = {
+    slug: string;
+    title: string;
+    excerpt: string;
+    updatedAt: string;
+};
+
+interface PostsProps {
+    posts: Post[];
+};
+
+export default function Posts({ posts }: PostsProps) {
     return (
         <>
             <Head>
@@ -14,23 +26,13 @@ export default function Posts() {
 
             <main className={styled.container}>
                 <div className={styled.posts}>
-                    <a href="#">
-                        <time>25 de fevereiro de 2022</time>
-                        <strong>O que é NextJS?</strong>
-                        <p>O NextJS também possibilita a criação de sites estáticos, que são aqueles sites sem muita interação com o usuário.</p>
-                    </a>
-
-                    <a href="#">
-                        <time>25 de fevereiro de 2022</time>
-                        <strong>O que é NextJS?</strong>
-                        <p>O NextJS também possibilita a criação de sites estáticos, que são aqueles sites sem muita interação com o usuário.</p>
-                    </a>
-
-                    <a href="#">
-                        <time>25 de fevereiro de 2022</time>
-                        <strong>O que é NextJS?</strong>
-                        <p>O NextJS também possibilita a criação de sites estáticos, que são aqueles sites sem muita interação com o usuário.</p>
-                    </a>
+                    {posts.map(post => (
+                        <a key={post.slug} href="#">
+                            <time>{post.updatedAt}</time>
+                            <strong>{post.title}</strong>
+                            <p>{post.excerpt}</p>
+                        </a>
+                    ))}
                 </div>
             </main>
         </>
@@ -48,7 +50,22 @@ export const getStaticProps: GetStaticProps = async () => {
 
     // console.log(JSON.stringify(response, null, 2));
 
+    const posts = response.results.map(post => {
+        return {
+            slug: post.uid,
+            title: RichText.asText(post.data.title),
+            excerpt: post.data.content.find(content => content.type === 'paragraph')?.text ?? '',
+            updatedAt: new Date(post.last_publication_date).toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+            }),
+        };
+    });
+
     return {
-        props: {}
+        props: {
+            posts,
+        }
     };
 }
