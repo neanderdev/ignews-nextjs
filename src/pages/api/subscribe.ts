@@ -26,7 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         });
 
         return res.status(200).json({
-            session: stripeCheckoutSession.id,
+            sessionId: stripeCheckoutSession.id,
         });
     } else {
         res.setHeader('Allow', 'POST');
