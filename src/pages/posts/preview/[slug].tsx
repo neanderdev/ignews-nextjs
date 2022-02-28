@@ -1,13 +1,14 @@
-import { GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 import Head from "next/head";
-import { getPrismicClient } from "../../../services/prismic";
-import { RichText } from "prismic-dom";
-
-import styled from "../post.module.scss";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { getPrismicClient } from "../../../services/prismic";
+import * as prismic from "@prismicio/client";
+import { RichText } from "prismic-dom";
+
+import styled from "../post.module.scss";
 
 interface PostPreviewProps {
     post: {
@@ -55,9 +56,23 @@ export default function PostPreview({ post }: PostPreviewProps) {
     );
 }
 
-export const getStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = async () => {
+    const prismicClient = getPrismicClient();
+
+    const response = await prismicClient.get({
+        predicates: prismic.predicate.at('document.type', 'publication'),
+        fetch: ['publication.title', 'publication.content'],
+        pageSize: 100,
+    });
+
+    const pathsPosts = response.results.map(post => {
+        return {
+            params: { slug: post.uid },
+        };
+    });
+
     return {
-        paths: [],
+        paths: pathsPosts,
         fallback: 'blocking',
     };
 };
@@ -83,6 +98,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
         props: {
             post,
-        }
+        },
+        revalidate: 60 * 30, // 30 minutos
     }
 }
