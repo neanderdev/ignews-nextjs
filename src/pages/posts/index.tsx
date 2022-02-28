@@ -46,12 +46,12 @@ export const getStaticProps: GetStaticProps = async () => {
     const prismicClient = getPrismicClient();
 
     const response = await prismicClient.get({
-        predicates: prismic.predicate.at('document.type', 'publicatio'),
-        fetch: ['publicatio.title', 'publicatio.content'],
+        predicates: prismic.predicate.at('document.type', 'publication'),
+        fetch: ['publication.title', 'publication.content'],
         pageSize: 100,
     });
 
-    // console.log(JSON.stringify(response, null, 2));
+    // console.log(JSON.stringify(response, null, 2));    
 
     const posts = response.results.map(post => {
         return {
