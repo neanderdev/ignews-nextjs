@@ -21,9 +21,9 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 - [ ] Responsividade
 
 ## 🚀 Tecnologias
-[![NEXTJS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)](https://pt-br.reactjs.org/docs/getting-started.html)
+[![NEXTJS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/docs)
 [![TYPESCRIPT](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/docs/)
-[![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white)](https://styled-components.com/docs)
+[![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=for-the-badge&logo=SASS&logoColor=white)](https://sass-lang.com/documentation)
 
 ## 💻 Pré-requisitos
 
